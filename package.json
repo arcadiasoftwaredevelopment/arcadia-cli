@@ -1,0 +1,36 @@
+{
+  "name": "create-arcadia-project",
+  "version": "0.1.0",
+  "description": "The command line tool that is used to create project and increase productivity for Arcadia Software Development company.",
+  "main": "./index.js",
+  "bin": {
+    "create-arcadia-project": "index.js"
+  },
+  "scripts": {
+    "start": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arcadiasoftwaredevelopment/create-arcadia-project.git"
+  },
+  "keywords": [
+    "Arcadia",
+    "CLI"
+  ],
+  "author": "Aek Sae-khow",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/arcadiasoftwaredevelopment/create-arcadia-project/issues"
+  },
+  "homepage": "https://github.com/arcadiasoftwaredevelopment/create-arcadia-project",
+  "dependencies": {
+    "bitbucket": "^2.1.0",
+    "chalk": "^4.0.0",
+    "dotenv": "^8.2.0",
+    "isbinaryfile": "^4.0.6",
+    "readline-sync": "^1.4.10",
+    "rimraf": "^3.0.2",
+    "simple-git": "^2.3.0",
+    "yargs": "^15.3.1"
+  }
+}

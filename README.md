@@ -1,1 +1,1 @@
-# arcadia-cli
+# Arcadia-CLI
