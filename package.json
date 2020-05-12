@@ -1,5 +1,5 @@
 {
-  "name": "create-arcadia-project",
+  "name": "@arcadiasoftwaredevelopment/create-arcadia-project",
   "version": "0.1.0",
   "description": "The command line tool that is used to create project and increase productivity for Arcadia Software Development company.",
   "main": "./index.js",
