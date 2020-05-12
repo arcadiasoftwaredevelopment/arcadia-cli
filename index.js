@@ -9,6 +9,7 @@ const bitbucketRepository = require('./repositories/bitbucketRepository')
 const gitLocalRepository = require('./repositories/gitLocalRepository')
 const templateUtil = require('./utils/templateUtil')
 
+yargs.scriptName('create-arcadia-project')
 yargs.version('0.1.0')
 yargs.demandCommand(1, 'You need at least one command before moving on')
 
