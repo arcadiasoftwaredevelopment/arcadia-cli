@@ -3,6 +3,7 @@ import {isBinaryFile} from 'isbinaryfile'
 import fs from 'fs'
 import path from 'path'
 import { EOL } from 'os'
+import validator from 'validator'
 
 namespace TemplateUtil {
 
@@ -24,9 +25,13 @@ namespace TemplateUtil {
 
                 if (resourceName.startsWith('.git')) continue
 
-                const renamedResourceName = resourceName
-                    .replace(TemplateSymbol_ProductName, projectName)
-                    .replace(TemplateSymbol_DatabaseName, databaseName)
+                let renamedResourceName = resourceName
+                if (!validator.isEmpty(projectName)) {
+                    renamedResourceName = renamedResourceName.replace(TemplateSymbol_ProductName, projectName)
+                }
+                if (!validator.isEmpty(databaseName)) {
+                    renamedResourceName = renamedResourceName.replace(TemplateSymbol_DatabaseName, databaseName)
+                }
 
                 const resourcePath = path.join(fromDirectoryPath, resourceName)
                 const promise = fs.promises.lstat(resourcePath).then(async (resourceInfo) => {

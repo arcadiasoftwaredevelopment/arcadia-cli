@@ -53,28 +53,33 @@ yargs.command<NewArguments>('new', 'Create a new project',
                 describe: 'Name of a project you want to create',
                 alias: 'project',
                 type: 'string',
-                default: 'Project'
+                default: ''
             },
             d: {
                 describe: 'Name of a database you want to use',
                 alias: 'database',
                 type: 'string',
-                default: 'Database'
+                default: ''
             }
         })
     },
     async (argv) => {
 
-        const templates = await BitbucketRepository.listAllTemplates()
-        const selectedTemplate = templates.find(template => template.name === argv.template)
+        try {
+            const templates = await BitbucketRepository.listAllTemplates()
+            const selectedTemplate = templates.find(template => template.name === argv.template)
 
-        if (!selectedTemplate) {
-            return console.log(chalk.red('Template not found'))
+            if (!selectedTemplate) {
+                return console.log(chalk.red('Template not found'))
+            }
+
+            const gitLocalDirectoryPath = await GitLocalRepository.cloneOrPullRepository(selectedTemplate)
+            await TemplateUtil.copyFilesInDirectoryRecursively(gitLocalDirectoryPath, process.cwd(), argv.project, argv.database)
+            console.log(chalk.green(`Completely created project '${argv.project}' with template '${argv.template}'`))
         }
-
-        const gitLocalDirectoryPath = await GitLocalRepository.cloneOrPullRepository(selectedTemplate)
-        await TemplateUtil.copyFilesInDirectoryRecursively(gitLocalDirectoryPath, process.cwd(), argv.project, argv.database)
-        console.log(chalk.green(`Completely created project '${argv.project}' with template '${argv.template}'`))
+        catch (error) {
+            console.log(chalk.red(error))
+        }
     })
 
 type TemplateArgument = {

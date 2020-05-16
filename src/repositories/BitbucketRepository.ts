@@ -6,6 +6,7 @@ import { EOL } from 'os'
 import BitbucketCredentials from '../models/BitbucketCredentials'
 import {Options} from 'bitbucket/lib/bitbucket'
 import Repository from '../models/Repository'
+import {domainToASCII} from 'url'
 
 namespace BitbucketRepository {
 
