@@ -1,21 +1,24 @@
-const chalk = require('chalk')
-const isBinaryFile = require("isbinaryfile").isBinaryFile;
-const fs = require('fs')
-const path = require('path')
-const { EOL } = require('os')
+import chalk from 'chalk'
+import {isBinaryFile} from 'isbinaryfile'
+import fs from 'fs'
+import path from 'path'
+import { EOL } from 'os'
 
-const TemplateSymbol_ProductName = /_ProjectName_/g
-const TemplateSymbol_DatabaseName = /_DatabaseName_/g
+namespace TemplateUtil {
 
-const copyFilesInDirectoryRecursively = (fromDirectoryPath, toDirectoryPath, projectName, databaseName) => {
+    const TemplateSymbol_ProductName = /_ProjectName_/g
+    const TemplateSymbol_DatabaseName = /_DatabaseName_/g
 
-    return new Promise(async (resolve, reject) => {
+    export const copyFilesInDirectoryRecursively = async(fromDirectoryPath: string,
+                                                        toDirectoryPath: string,
+                                                        projectName: string,
+                                                        databaseName: string): Promise<void> => {
 
         try {
 
             const resourceNames = await fs.promises.readdir(fromDirectoryPath)
             const promises = []
-            for (let i = 0;i < resourceNames.length;i++) {
+            for (let i = 0; i < resourceNames.length; i++) {
 
                 const resourceName = resourceNames[i]
 
@@ -34,8 +37,7 @@ const copyFilesInDirectoryRecursively = (fromDirectoryPath, toDirectoryPath, pro
                         const destDirectoryPath = path.join(toDirectoryPath, renamedResourceName)
                         await fs.promises.mkdir(destDirectoryPath)
                         await copyFilesInDirectoryRecursively(srcDirectoryPath, destDirectoryPath, projectName, databaseName)
-                    }
-                    else {
+                    } else {
                         // File
                         const srcFilePath = resourcePath
                         const destFilePath = path.join(toDirectoryPath, renamedResourceName)
@@ -44,8 +46,7 @@ const copyFilesInDirectoryRecursively = (fromDirectoryPath, toDirectoryPath, pro
                         if (thisFileIsBinary) {
                             await fs.promises.copyFile(srcFilePath, destFilePath)
                             console.log(chalk.green('Created ' + destFilePath))
-                        }
-                        else {
+                        } else {
                             const data = await fs.promises.readFile(srcFilePath)
                             const fileContent = data.toString()
                             const updatedFileContent = fileContent
@@ -61,15 +62,12 @@ const copyFilesInDirectoryRecursively = (fromDirectoryPath, toDirectoryPath, pro
             }
 
             await Promise.all(promises)
-            return resolve()
-        }
-        catch (error) {
-            return reject(`Error during copy template files:${EOL + error}`)
-        }
-    })
 
+        } catch (error) {
+            throw new Error(`Error during copy template files:${EOL + error}`)
+        }
+
+    }
 }
 
-module.exports = {
-    copyFilesInDirectoryRecursively
-}
+export default TemplateUtil

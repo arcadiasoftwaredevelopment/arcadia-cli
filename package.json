@@ -1,13 +1,14 @@
 {
   "name": "@arcadiasoftwaredevelopment/create-arcadia-project",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The command line tool that is used to create project and increase productivity for Arcadia Software Development company.",
-  "main": "./index.js",
+  "main": "dist/index.js",
   "bin": {
-    "create-arcadia-project": "index.js"
+    "create-arcadia-project": "dist/index.js"
   },
   "scripts": {
-    "start": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -26,11 +27,19 @@
   "dependencies": {
     "bitbucket": "^2.1.0",
     "chalk": "^4.0.0",
-    "dotenv": "^8.2.0",
     "isbinaryfile": "^4.0.6",
     "readline-sync": "^1.4.10",
     "rimraf": "^3.0.2",
     "simple-git": "^2.3.0",
     "yargs": "^15.3.1"
+  },
+  "devDependencies": {
+    "@types/chalk": "^2.2.0",
+    "@types/dotenv": "^8.2.0",
+    "@types/node": "^14.0.1",
+    "@types/readline-sync": "^1.4.3",
+    "@types/rimraf": "^3.0.0",
+    "@types/yargs": "^15.0.5",
+    "typescript": "^3.9.2"
   }
 }

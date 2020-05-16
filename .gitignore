@@ -1,5 +1,10 @@
 .DS_Store
+# Folder that keep Git repositories
 .git_repositories/
+# Output folder for Typescript compiler
+dist/
+# File that keep Bitbucket credentials
+bitbucket-credentials.json
 
 # Logs
 logs

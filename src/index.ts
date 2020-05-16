@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 
-require('dotenv').config()
-const yargs = require('yargs')
-const readlineSync = require('readline-sync')
-const chalk = require('chalk')
+import dotenv from 'dotenv'
+dotenv.config()
 
-const bitbucketRepository = require('./repositories/bitbucketRepository')
-const gitLocalRepository = require('./repositories/gitLocalRepository')
-const templateUtil = require('./utils/templateUtil')
+import yargs from 'yargs'
+import readlineSync from 'readline-sync'
+import chalk from 'chalk'
+
+import BitbucketRepository from './repositories/BitbucketRepository'
+import GitLocalRepository from './repositories/GitLocalRepository'
+import TemplateUtil from './utils/TemplateUtil'
 
 yargs.scriptName('create-arcadia-project')
 yargs.version('0.1.0')
@@ -25,14 +27,19 @@ yargs.command('login', 'Login to Bitbucket repository',
             const username = process.env.BITBUCKET_USERNAME || readlineSync.question('Username: ')
             const password = process.env.BITBUCKET_PASSWORD || readlineSync.question('Password: ', {hideEchoBack: true})
 
-            await bitbucketRepository.loginBitbucket(username, password)
+            await BitbucketRepository.loginBitbucket(username, password)
         }
         catch (error) {
             console.log(chalk.red(error))
         }
     })
 
-yargs.command('new', 'Create a new project',
+type NewArguments = {
+    template: string,
+    project: string,
+    database: string
+}
+yargs.command<NewArguments>('new', 'Create a new project',
     yargs => {
         yargs.version(false)
         yargs.options({
@@ -58,19 +65,23 @@ yargs.command('new', 'Create a new project',
     },
     async (argv) => {
 
-        const templates = await bitbucketRepository.listAllTemplates()
+        const templates = await BitbucketRepository.listAllTemplates()
         const selectedTemplate = templates.find(template => template.name === argv.template)
 
         if (!selectedTemplate) {
             return console.log(chalk.red('Template not found'))
         }
 
-        const gitLocalDirectoryPath = await gitLocalRepository.cloneOrPullRepository(selectedTemplate)
-        await templateUtil.copyFilesInDirectoryRecursively(gitLocalDirectoryPath, process.cwd(), argv.project, argv.database)
+        const gitLocalDirectoryPath = await GitLocalRepository.cloneOrPullRepository(selectedTemplate)
+        await TemplateUtil.copyFilesInDirectoryRecursively(gitLocalDirectoryPath, process.cwd(), argv.project, argv.database)
         console.log(chalk.green(`Completely created project '${argv.project}' with template '${argv.template}'`))
     })
 
-yargs.command('template', 'Manipulate on template',
+type TemplateArgument = {
+    list: boolean,
+    clean: boolean
+}
+yargs.command<TemplateArgument>('template', 'Manipulate on template',
     yargs => {
         yargs.version(false)
         yargs.options({
@@ -88,7 +99,7 @@ yargs.command('template', 'Manipulate on template',
 
         try {
             if (argv.list) {
-                const templates = await bitbucketRepository.listAllTemplates()
+                const templates = await BitbucketRepository.listAllTemplates()
                 templates.sort((a, b) => {
                     return a.name.localeCompare(b.name)
                 })
@@ -101,7 +112,7 @@ yargs.command('template', 'Manipulate on template',
                         console.log(message)
                 }
             } else if (argv.clean) {
-                await gitLocalRepository.removeGitLocalDirectory()
+                await GitLocalRepository.removeGitLocalDirectory()
             }
             else {
                 yargs.showHelp()
