@@ -24,9 +24,6 @@
     "url": "https://github.com/arcadiasoftwaredevelopment/create-arcadia-project/issues"
   },
   "homepage": "https://github.com/arcadiasoftwaredevelopment/create-arcadia-project",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "dependencies": {
     "bitbucket": "^2.1.0",
     "chalk": "^4.0.0",
