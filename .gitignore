@@ -1,6 +1,7 @@
 .DS_Store
+.idea/
 # Folder that keep Git repositories
-git_repositories/
+git-repositories/
 # Output folder for Typescript compiler
 dist/
 # File that keep Bitbucket credentials

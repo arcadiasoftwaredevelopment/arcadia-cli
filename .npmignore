@@ -1,5 +1,5 @@
 node_modules/
-git_repositories/
+git-repositories/
 src/
 .idea/
 bitbucket-credentials.json

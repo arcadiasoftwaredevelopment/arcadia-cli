@@ -1,6 +1,6 @@
 {
   "name": "@arcadiasoftwaredevelopment/create-arcadia-project",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "The command line tool that is used to create project and increase productivity for Arcadia Software Development company.",
   "main": "dist/index.js",
   "bin": {
@@ -24,9 +24,13 @@
     "url": "https://github.com/arcadiasoftwaredevelopment/create-arcadia-project/issues"
   },
   "homepage": "https://github.com/arcadiasoftwaredevelopment/create-arcadia-project",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "dependencies": {
     "bitbucket": "^2.1.0",
     "chalk": "^4.0.0",
+    "dotenv": "^8.2.0",
     "isbinaryfile": "^4.0.6",
     "readline-sync": "^1.4.10",
     "rimraf": "^3.0.2",
