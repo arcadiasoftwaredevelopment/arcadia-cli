@@ -1,5 +1,5 @@
 import {APIClient} from 'bitbucket'
-import Credentials from './Credentials'
+import Credentials from './credentials.interface'
 
 export default interface BitbucketCredentials {
     bitbucket: APIClient,

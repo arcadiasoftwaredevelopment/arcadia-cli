@@ -3,10 +3,9 @@ import path from 'path'
 import chalk from 'chalk'
 import {Bitbucket} from 'bitbucket'
 import { EOL } from 'os'
-import BitbucketCredentials from '../models/BitbucketCredentials'
+import BitbucketCredentials from './bitbucket-credentials.interface'
 import {Options} from 'bitbucket/lib/bitbucket'
-import Repository from '../models/Repository'
-import {domainToASCII} from 'url'
+import Repository from './repository.interface'
 
 namespace BitbucketRepository {
 
@@ -26,9 +25,9 @@ namespace BitbucketRepository {
             }
 
             const bitbucket = new Bitbucket(clientOptions)
-            const {data: userData} = await bitbucket.user.get({fields: 'username,display_name'})
+            const response = await bitbucket.user.get({fields: 'username,display_name'})
 
-            if (!userData || !userData.username) {
+            if (!response || !response.data || !response.data.username) {
                 throw new Error('Could not find Bitbucket account')
             }
 
@@ -36,7 +35,7 @@ namespace BitbucketRepository {
             const bitbucketCredentialsJson = JSON.stringify(clientOptions.auth)
             await fs.promises.writeFile(bitbucketCredentialsFilePath, bitbucketCredentialsJson)
 
-            console.log(chalk.green(`Hi ${userData.display_name}, you login Bitbucket successfully`))
+            console.log(chalk.green(`Hi ${response.data.display_name}, you login Bitbucket successfully`))
 
         } catch (error) {
             throw new Error(`Error while logging in Bitbucket:${EOL + error}`)

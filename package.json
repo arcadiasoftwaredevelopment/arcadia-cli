@@ -8,7 +8,9 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "repository": {
     "type": "git",
@@ -38,11 +40,14 @@
   "devDependencies": {
     "@types/chalk": "^2.2.0",
     "@types/dotenv": "^8.2.0",
+    "@types/jest": "^25.2.3",
     "@types/node": "^14.0.1",
     "@types/readline-sync": "^1.4.3",
     "@types/rimraf": "^3.0.0",
     "@types/validator": "^13.0.0",
     "@types/yargs": "^15.0.5",
+    "jest": "^26.0.1",
+    "ts-jest": "^26.0.0",
     "typescript": "^3.9.2"
   }
 }

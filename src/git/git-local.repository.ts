@@ -4,7 +4,7 @@ import path from 'path'
 import fs from 'fs'
 import { EOL } from 'os'
 import rimraf from 'rimraf'
-import Repository from '../models/Repository'
+import Repository from '../bitbucket/repository.interface'
 
 namespace GitLocalRepository {
 

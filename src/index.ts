@@ -7,9 +7,9 @@ import yargs from 'yargs'
 import readlineSync from 'readline-sync'
 import chalk from 'chalk'
 
-import BitbucketRepository from './repositories/BitbucketRepository'
-import GitLocalRepository from './repositories/GitLocalRepository'
-import TemplateUtil from './utils/TemplateUtil'
+import BitbucketRepository from './bitbucket/bitbucket.repository'
+import GitLocalRepository from './git/git-local.repository'
+import TemplateUtil from './template/template.util'
 
 yargs.scriptName('create-arcadia-project')
 yargs.version('0.1.0')
