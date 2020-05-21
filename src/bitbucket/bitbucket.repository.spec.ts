@@ -1,6 +1,7 @@
 jest.mock('bitbucket')
 jest.mock('fs')
 jest.mock('config')
+jest.spyOn(console, 'log').mockImplementation(() => {})
 
 import BitbucketRepository from './bitbucket.repository'
 import config from 'config'
@@ -38,7 +39,7 @@ describe('BitbucketRepository', () => {
             const mockGetUser = jest.fn().mockResolvedValue(null)
             _setMockGetUser(mockGetUser)
 
-            expect(BitbucketRepository.loginBitbucket('username', 'password')).rejects.toThrow(new Error('Could not find Bitbucket account'))
+            expect(BitbucketRepository.loginBitbucket('username', 'password')).rejects.toThrowError()
 
         })
 

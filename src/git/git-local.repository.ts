@@ -10,18 +10,21 @@ namespace GitLocalRepository {
 
     const gitLocalParentDirectoryPath = path.join(__dirname, '../../git-repositories')
 
-    export const removeGitLocalDirectory = (): Promise<void> => {
+    export let removeGitLocalDirectory = (): Promise<void> => {
 
         return new Promise((resolve, reject) => {
 
             rimraf(gitLocalParentDirectoryPath, {}, (error) => {
-                if (error) return reject(`Error while removing templates:${EOL + error}`)
+                if (error) {
+                    reject(`Error while removing templates:${EOL + error}`)
+                    return
+                }
                 resolve()
             })
         })
     }
 
-    export const cloneOrPullRepository = async (repository: Repository): Promise<string> => {
+    export let cloneOrPullRepository = async (repository: Repository): Promise<string> => {
 
         try {
             // Check if the parent directory exists
