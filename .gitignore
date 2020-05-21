@@ -1,5 +1,6 @@
 .DS_Store
 .idea/
+coverage/
 # Folder that keep Git repositories
 git-repositories/
 # Output folder for Typescript compiler

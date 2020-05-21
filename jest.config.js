@@ -3,5 +3,5 @@ module.exports = {
   testEnvironment: 'node',
   moduleFileExtensions: ['ts', 'js'],
   testRegex: '.spec.ts$',
-  coverageDirectory: '../coverage'
+  collectCoverage: true
 };

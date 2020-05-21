@@ -4,3 +4,8 @@ src/
 .idea/
 bitbucket-credentials.json
 tsconfig.json
+coverage/
+.circleci/
+__mocks__/
+jest.config.js
+**/*.spec.js

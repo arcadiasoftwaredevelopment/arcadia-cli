@@ -46,6 +46,7 @@
     "@types/rimraf": "^3.0.0",
     "@types/validator": "^13.0.0",
     "@types/yargs": "^15.0.5",
+    "codecov": "^3.7.0",
     "jest": "^26.0.1",
     "ts-jest": "^26.0.0",
     "typescript": "^3.9.2"
