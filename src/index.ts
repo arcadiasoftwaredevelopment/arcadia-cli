@@ -1,8 +1,5 @@
 #!/usr/bin/env node
 
-import dotenv from 'dotenv'
-dotenv.config()
-
 import yargs from 'yargs'
 import readlineSync from 'readline-sync'
 import chalk from 'chalk'
@@ -24,8 +21,8 @@ yargs.command('login', 'Login to Bitbucket repository',
         try {
             // The command line will try to find Bitbucket's username and password from Environment configuration first
             // If the configuration is not found, the system will prompt user to input username and password
-            const username = process.env.BITBUCKET_USERNAME || readlineSync.question('Username: ')
-            const password = process.env.BITBUCKET_PASSWORD || readlineSync.question('Password: ', {hideEchoBack: true})
+            const username = readlineSync.question('Username: ')
+            const password = readlineSync.question('Password: ', {hideEchoBack: true})
 
             await BitbucketRepository.loginBitbucket(username, password)
         }

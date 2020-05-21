@@ -1,26 +1,24 @@
 jest.mock('bitbucket')
 jest.mock('fs')
+jest.mock('config')
 
 import BitbucketRepository from './bitbucket.repository'
+import config from 'config'
 
 describe('BitbucketRepository', () => {
 
-    let _setMockWriteFile: Function
-    let _setMockAccess: Function
-    let _setMockReadFile: Function
-    let _setMockGetUser: Function;
-
-    beforeEach(() => {
-        const {setMockWriteFile, setMockAccess, setMockReadFile} = require('fs')
-        _setMockWriteFile = setMockWriteFile
-        _setMockAccess = setMockAccess
-        _setMockReadFile = setMockReadFile
-
-        const {setMockGetUser} = require('bitbucket')
-        _setMockGetUser = setMockGetUser
-    })
-
     describe('loginBitbucket', () => {
+
+        let _setMockWriteFile: Function
+        let _setMockGetUser: Function
+
+        beforeEach(() => {
+            const {setMockWriteFile} = require('fs')
+            const {setMockGetUser} = require('bitbucket')
+
+            _setMockWriteFile = setMockWriteFile
+            _setMockGetUser = setMockGetUser
+        })
 
         it('should login successfully',   async () => {
 
@@ -47,6 +45,15 @@ describe('BitbucketRepository', () => {
     })
 
     describe('getBitbucket', () => {
+
+        let _setMockAccess: Function
+        let _setMockReadFile: Function
+
+        beforeEach(() => {
+            const {setMockAccess, setMockReadFile} = require('fs')
+            _setMockAccess = setMockAccess
+            _setMockReadFile = setMockReadFile
+        })
 
         it('should get Bitbucket credentials successfully', async () => {
 
@@ -83,7 +90,46 @@ describe('BitbucketRepository', () => {
 
     describe('listAllTemplates', () => {
 
+        let _bitbucket: any
 
+        beforeEach(() => {
+            const {Bitbucket} = require('bitbucket')
+            _bitbucket = new Bitbucket()
+        })
+
+        it('should return all templates successfully',  async () => {
+
+            const mockRepositories: any[] = [
+                {slug: 'Repository 1'},
+                {slug: 'ABC!@#$ %^&+'}
+            ]
+            const mockGetRepositories = jest.fn().mockResolvedValue({data: {values: mockRepositories}})
+            _bitbucket.repositories.list = mockGetRepositories
+
+            const mockCredentials = {
+                username: 'username',
+                password: 'password'
+            }
+
+            const workspace = config.get<string>('bitbucket.workspace')
+
+            BitbucketRepository.getBitbucket = jest.fn().mockResolvedValue({bitbucket: _bitbucket, credentials: mockCredentials})
+            const results = await BitbucketRepository.listAllTemplates()
+            expect(results.length).toEqual(mockRepositories.length)
+            for (let i = 0;i < results.length;i++) {
+                const result = results[i]
+                const mockRepository = mockRepositories[i]
+
+                expect(result.name).toEqual(mockRepository.slug)
+
+                const encodedUsername = encodeURI(mockCredentials.username)
+                const encodedPassword = encodeURI(mockCredentials.password)
+                const encodedWorkspace = encodeURI(workspace)
+                const encodedSlug = encodeURI(mockRepository.slug)
+                const gitUrl = `https://${encodedUsername}:${encodedPassword}@bitbucket.org/${encodedWorkspace}/${encodedSlug}.git`
+                expect(result.gitUrl).toEqual(gitUrl)
+            }
+            expect(mockGetRepositories).toHaveBeenCalled()
+        })
     });
-
 })

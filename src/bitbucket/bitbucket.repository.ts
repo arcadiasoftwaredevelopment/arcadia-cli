@@ -6,14 +6,13 @@ import { EOL } from 'os'
 import BitbucketCredentials from './bitbucket-credentials.interface'
 import {Options} from 'bitbucket/lib/bitbucket'
 import Repository from './repository.interface'
+import * as config from 'config'
 
 namespace BitbucketRepository {
 
-    const workspace = 'arcadiasoftware'
-    const projectKey = 'ARCPROJTEMP'
     const bitbucketCredentialsFilePath = path.join(__dirname, '../../bitbucket-credentials.json')
 
-    export const loginBitbucket = async (username: string, password: string): Promise<void> => {
+    export let loginBitbucket = async (username: string, password: string): Promise<void> => {
 
         try {
             const clientOptions = {
@@ -42,7 +41,7 @@ namespace BitbucketRepository {
         }
     }
 
-    export const getBitbucket = async (): Promise<BitbucketCredentials> => {
+    export let getBitbucket = async (): Promise<BitbucketCredentials> => {
 
         try {
             await fs.promises.access(bitbucketCredentialsFilePath, fs.constants.F_OK)
@@ -66,9 +65,12 @@ namespace BitbucketRepository {
         }
     }
 
-    export const listAllTemplates = async (): Promise<Repository[]> => {
+    export let listAllTemplates = async (): Promise<Repository[]> => {
 
+        const workspace: string = config.get<string>('bitbucket.workspace')
+        const projectKey = config.get<string>('bitbucket.projectKey')
         try {
+
             const {bitbucket, credentials} = await getBitbucket()
             const {data} = await bitbucket.repositories.list({
                 workspace,
