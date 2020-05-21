@@ -11,7 +11,7 @@ jobs:
           steps:
             - run: npm install
             - run: npm run build
-            - run: npm run test:coverage
+            - run: npm run test
             - run: ./node_modules/.bin/codecov --token="$CODECOV_TOKEN"
 workflows:
     build-and-test:
