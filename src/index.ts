@@ -9,7 +9,7 @@ import GitLocalRepository from './git/git-local.repository'
 import TemplateUtil from './template/template.util'
 
 yargs.scriptName('create-arcadia-project')
-yargs.version('0.1.0')
+yargs.version('0.1.3')
 yargs.demandCommand(1, 'You need at least one command before moving on')
 
 yargs.command('login', 'Login to Bitbucket repository',

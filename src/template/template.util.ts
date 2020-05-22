@@ -54,9 +54,15 @@ namespace TemplateUtil {
                         } else {
                             const data = await fs.promises.readFile(srcFilePath)
                             const fileContent = data.toString()
-                            const updatedFileContent = fileContent
-                                .replace(TemplateSymbol_ProductName, projectName)
-                                .replace(TemplateSymbol_DatabaseName, databaseName)
+                            let updatedFileContent = fileContent
+
+                            if (!validator.isEmpty(projectName)) {
+                                updatedFileContent = updatedFileContent.replace(TemplateSymbol_ProductName, projectName)
+                            }
+
+                            if (!validator.isEmpty(databaseName)) {
+                                updatedFileContent = updatedFileContent.replace(TemplateSymbol_DatabaseName, databaseName)
+                            }
 
                             await fs.promises.writeFile(destFilePath, updatedFileContent)
                             console.log(chalk.green('Created ' + destFilePath))
