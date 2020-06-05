@@ -6,7 +6,6 @@ import { EOL } from 'os'
 import BitbucketCredentials from './bitbucket-credentials.interface'
 import {Options} from 'bitbucket/lib/bitbucket'
 import Repository from './repository.interface'
-import * as config from 'config'
 
 namespace BitbucketRepository {
 
@@ -67,8 +66,8 @@ namespace BitbucketRepository {
 
     export let listAllTemplates = async (): Promise<Repository[]> => {
 
-        const workspace: string = config.get<string>('bitbucket.workspace')
-        const projectKey = config.get<string>('bitbucket.projectKey')
+        const workspace = 'arcadiasoftware'
+        const projectKey = 'ARCPROJTEMP'
         try {
 
             const {bitbucket, credentials} = await getBitbucket()

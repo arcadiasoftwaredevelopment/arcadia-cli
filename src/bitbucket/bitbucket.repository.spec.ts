@@ -4,7 +4,6 @@ jest.mock('config')
 jest.spyOn(console, 'log').mockImplementation(() => {})
 
 import BitbucketRepository from './bitbucket.repository'
-import config from 'config'
 
 describe('BitbucketRepository', () => {
 
@@ -112,7 +111,7 @@ describe('BitbucketRepository', () => {
                 password: 'password'
             }
 
-            const workspace = config.get<string>('bitbucket.workspace')
+            const workspace = 'arcadiasoftware'
 
             BitbucketRepository.getBitbucket = jest.fn().mockResolvedValue({bitbucket: _bitbucket, credentials: mockCredentials})
             const results = await BitbucketRepository.listAllTemplates()
