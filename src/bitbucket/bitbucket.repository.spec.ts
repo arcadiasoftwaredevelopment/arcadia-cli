@@ -1,6 +1,5 @@
 jest.mock('bitbucket')
 jest.mock('fs')
-jest.mock('config')
 jest.spyOn(console, 'log').mockImplementation(() => {})
 
 import BitbucketRepository from './bitbucket.repository'
