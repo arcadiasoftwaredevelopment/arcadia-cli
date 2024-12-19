@@ -71,28 +71,51 @@ namespace BitbucketRepository {
         try {
 
             const {bitbucket, credentials} = await getBitbucket()
-            const {data} = await bitbucket.repositories.list({
-                workspace,
-                q: `project.key="${projectKey}"`
-            })
+            let url: string | undefined = undefined;
+            let allTemplates: Repository[] = [];
+            let pageString = "1";
 
-            if (!data.values) throw new Error('Could not find any Arcadia repository from your Bitbucket credentials')
+            do {
+                // Fetch repositories with pagination
+                const { data } = await bitbucket.repositories.list({
+                    workspace,
+                    q: `project.key="${projectKey}"`,
+                    page: pageString
+                });
 
-            const templates: Repository[] = []
-            for (let i = 0; i < data.values.length; i++) {
-                const value = data.values[i]
+                if (!data.values) throw new Error('Could not find any Arcadia repository from your Bitbucket credentials');
 
-                const encodedUsername = encodeURI(credentials.username)
-                const encodedPassword = encodeURI(credentials.password)
-                const encodedWorkspace = encodeURI(workspace)
-                const encodedSlug = encodeURI(value.slug)
-                templates.push({
-                    name: value.slug,
-                    gitUrl: `https://${encodedUsername}:${encodedPassword}@bitbucket.org/${encodedWorkspace}/${encodedSlug}.git`
-                })
-            }
+                // Process and collect repositories
+                const templates: Repository[] = data.values.map(value => {
+                    const encodedUsername = encodeURI(credentials.username);
+                    const encodedPassword = encodeURI(credentials.password);
+                    const encodedWorkspace = encodeURI(workspace);
+                    const encodedSlug = encodeURI(value.slug);
 
-            return templates
+                    return {
+                        name: value.slug,
+                        gitUrl: `https://${encodedUsername}:${encodedPassword}@bitbucket.org/${encodedWorkspace}/${encodedSlug}.git`,
+                    };
+                });
+
+                allTemplates = allTemplates.concat(templates);
+
+                // Set the URL for the next page
+                url = data.next;
+                
+                let page = data.page ?? 0;
+                let pagelen = data.pagelen ?? 0;
+                let size = data.size ?? 0;
+
+                if(page * pagelen < size) {
+                    pageString = String(page + 1);
+                }
+            } while (url);
+            
+            // Sort the results by name
+            allTemplates.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+
+            return allTemplates;
         } catch (error) {
             throw new Error(`Error while accessing repository information from Bitbucket:${EOL + error}`)
         }
